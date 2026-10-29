@@ -1,0 +1,46 @@
+ARCHIVED: Streak shield (Profile UI + “Use streak shield”)
+
+Removed from the live app. Server + client helpers remain:
+  - `applyStreakShield` in `src/lib/userProfile.js`
+  - `dailyTokenCaps().streakShields` and private profile `streakShields` field
+  - `functions/index.js` dailyTokenCaps alignment
+
+Restore:
+  1. Copy `TokenConsumableRow` from `ProfileStreakShieldSection.js` into `ProfilePage.js` (or import from archived file).
+  2. Re-import `applyStreakShield`, `dailyTokenCaps` from `../lib/userProfile` and `formatDayKey` from `../lib/practiceStreaks`.
+  3. Use `privateProfile` from `useUserProfile()` for `tok.streakShields`; `const caps = dailyTokenCaps(prog.level)`.
+  4. Paste the section below after section 01 (Level), re-number following sections (Identity → 03, Badges → 04, Share → 05).
+
+```jsx
+  async function onShield() {
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    const key = formatDayKey(y);
+    await applyStreakShield(studentId, key);
+    window.alert('Streak shield applied for yesterday’s calendar day.');
+  }
+
+      <section>
+        <SectionLabel
+          index="02"
+          title="Streak shield"
+          sub="One use per UTC day when unlocked — covers yesterday if you missed a practice day"
+        />
+        <ul className="grid gap-3 sm:max-w-md">
+          <TokenConsumableRow
+            label="Streak shields"
+            unlockLevel={8}
+            progLevel={prog.level}
+            current={tok.streakShields}
+            cap={caps.streakShields}
+          />
+        </ul>
+        {(prog.level ?? 1) >= 8 && (tok.streakShields ?? 0) > 0 ? (
+          <div className="mt-4">
+            <Button variant="secondary" size="sm" onClick={() => onShield().catch((e) => window.alert(e.message))}>
+              Use streak shield
+            </Button>
+          </div>
+        ) : null}
+      </section>
+```

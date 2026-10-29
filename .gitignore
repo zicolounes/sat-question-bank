@@ -1,0 +1,50 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# editor / local tooling
+.cursor/
+.agents/
+.junie/
+.firebase/
+skills-lock.json
+
+# cloud functions deps
+/functions/node_modules
+
+# Local bulk import drafts (copy from data/question-import-draft.example.json)
+/data/question-import-draft.json
+
+# firebase admin keys (NEVER commit)
+/serviceAccountKey.json
+/firebase-service-account.json
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# College Board SSQB content (not mine to publish)
+/data/questions.json
+/data/questionsold*.json
+/data/pdf-export-*.json
+/data/QUESTIONS-NEEDING-IMAGES.md
+/import-export/
+/public/question-images/
+/scripts/append-rw-batch-2026-05.js
+/scripts/append-math-batch-2026-05-11.js
+/scripts/fix-encoding-questions.js
+*.zip

@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Keep this email in sync with ADMIN_EMAIL in src/lib/firebase.js
+    function adminEmail() {
+      return 'zico@karimlounes.com';
+    }
+
+    // Sync with QUESTION_REPORTS_VIEWER_EMAIL in src/lib/firebase.js (or REACT_APP_QUESTION_REPORTS_VIEWER_EMAIL at build).
+    function questionReportsViewerEmail() {
+      return 'zico@karimlounes.com';
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email.lower() == adminEmail();
+    }
+
+    function canReadQuestionReports() {
+      return isSignedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email.lower() == questionReportsViewerEmail();
+    }
+
+    match /questions/{questionId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /responses/{responseId} {
+      // Students can only write their own response logs.
+      allow create: if isSignedIn() && request.resource.data.student_id == request.auth.uid;
+
+      // Students can read only their own response logs; admin can read all.
+      allow read: if isAdmin() || (isSignedIn() && resource.data.student_id == request.auth.uid);
+      allow update, delete: if false;
+    }
+
+    // Public profile slice (leaderboard + title); any signed-in user can read for /leaderboard.
+    match /userProfilePublic/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // Tokens & private counters — owner only.
+    match /userProfilePrivate/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Mirror of public stats for ordering queries (level, xp).
+    match /leaderboard/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // Student feedback on bank items (typos, missing figures). Admin reads in dev UI.
+    match /questionReports/{reportId} {
+      allow create: if isSignedIn()
+        && request.resource.data.student_id == request.auth.uid
+        && request.resource.data.student_email is string
+        && request.resource.data.student_email.size() >= 1
+        && request.resource.data.question_id is number
+        && request.resource.data.question_id >= 1
+        && request.resource.data.question_id == math.floor(request.resource.data.question_id)
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() >= 4
+        && request.resource.data.reason.size() <= 4000
+        && request.resource.data.missing_image is bool
+        && request.resource.data.looks_weird is bool
+        && request.resource.data.created_at is string;
+
+      allow read: if canReadQuestionReports();
+      allow update, delete: if false;
+    }
+  }
+}

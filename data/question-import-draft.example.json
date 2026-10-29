@@ -1,0 +1,17 @@
+[
+  {
+    "needs_image": true,
+    "subject": "Math",
+    "domain": "Advanced Math",
+    "skill": "Nonlinear functions",
+    "difficulty": "Medium",
+    "difficulty_tier": "2",
+    "question_text": "The scatterplot shows the relationship between two variables. Based on the graph, which statement is best supported?",
+    "choice_a": "Example choice A",
+    "choice_b": "Example choice B",
+    "choice_c": "Example choice C",
+    "choice_d": "Example choice D",
+    "correct_answer": "A",
+    "explanation": "Replace this example row, then save as data/question-import-draft.json and run npm run merge:question-draft"
+  }
+]

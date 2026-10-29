@@ -1,0 +1,350 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Primary UI: Crimson Pro (local). Ranade kept for Font Lab / presets. */
+
+/**
+ * Crimson Pro — files in `src/fonts/` (variable fonts cover weights 100–900).
+ * Ranade — optional sans; @font-face blocks below.
+ */
+@font-face {
+  font-family: 'Crimson Pro';
+  src: url('./fonts/CrimsonPro-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crimson Pro';
+  src: url('./fonts/CrimsonPro-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/**
+ * Ranade — optional; used when switching presets in Font Lab.
+ */
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Regular.otf') format('opentype'),
+    local('Ranade Regular'),
+    local('Ranade');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Italic.otf') format('opentype'),
+    local('Ranade Italic'),
+    local('Ranade');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Medium.otf') format('opentype'),
+    local('Ranade Medium'),
+    local('Ranade');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-MediumItalic.otf') format('opentype'),
+    local('Ranade Medium Italic'),
+    local('Ranade');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Bold.otf') format('opentype'),
+    local('Ranade Bold'),
+    local('Ranade');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-BoldItalic.otf') format('opentype'),
+    local('Ranade Bold Italic'),
+    local('Ranade');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Light.otf') format('opentype'),
+    local('Ranade Light'),
+    local('Ranade');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-LightItalic.otf') format('opentype'),
+    local('Ranade Light Italic'),
+    local('Ranade');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-Thin.otf') format('opentype'),
+    local('Ranade Thin'),
+    local('Ranade');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src:
+    url('./fonts/Ranade-ThinItalic.otf') format('opentype'),
+    local('Ranade Thin Italic'),
+    local('Ranade');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --canvas: #ffffff;
+    --canvas-dim: #f8fafe;
+    --canvas-deep: #f4f7fd;
+    --rule: #b8c8f8;
+    /** Overridden by Font Lab (localStorage) — see `src/fontLab/fontLabPrefs.js`. */
+    --font-sans: 'Crimson Pro', ui-serif, Georgia, 'Times New Roman', serif;
+    --font-display: 'Crimson Pro', ui-serif, Georgia, 'Times New Roman', serif;
+    /** Same as body by default; Font Lab may override. */
+    --font-mono: var(--font-sans);
+  }
+
+  /** Slightly larger type on desktop only — keeps phones from overscaling rem spacing. */
+  html {
+    font-size: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 106.25%;
+    }
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans), ui-serif, Georgia, 'Times New Roman', serif;
+    font-feature-settings: 'kern' 1;
+    @apply text-ink antialiased;
+    background-color: var(--canvas-dim);
+    background-image:
+      radial-gradient(ellipse 120% 70% at 50% -12%, rgba(97, 134, 253, 0.06), transparent 55%),
+      linear-gradient(180deg, #f6f8fc 0%, var(--canvas-dim) 10rem, var(--canvas-dim) 100%);
+  }
+
+  ::selection {
+    background: #0337e1;
+    color: #fff;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display), ui-serif, Georgia, 'Times New Roman', serif;
+    letter-spacing: -0.015em;
+  }
+
+  /* Keep numbers aligned without switching to a mono font. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  /** Subtle blue caret matches accent. */
+  input,
+  textarea,
+  select {
+    caret-color: #0337e1;
+  }
+}
+
+@layer components {
+  /**
+   * Primary nav labels, header Practice CTA, log out, and dashboard hero action row.
+   * Slightly larger than the old 12.75px editorial mono scale so chrome stays readable.
+   */
+  .type-nav-cta {
+    @apply text-[15px] font-semibold tracking-[0.06em];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /** Editorial section kicker — small caps mono with a leading dash. */
+  .kicker {
+    @apply uppercase text-mist;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  /** Kicker on dark chrome (header). */
+  .kicker-on-dark {
+    @apply uppercase text-white/50;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  /** Hairline rule used between sections. */
+  .rule-x {
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /** Numeric stat — mono + tight tracking. */
+  .stat-num {
+    font-feature-settings: 'tnum', 'zero';
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /** “Pre-paint” for badges/buttons that get hit by Dark Reader, etc. */
+  .preserve-brand-colors {
+    forced-color-adjust: none;
+  }
+
+  /** Editorial focus ring. */
+  .focus-ring {
+    outline: none;
+    box-shadow: 0 0 0 2px #f5f8ff, 0 0 0 4px #0337e1;
+  }
+}
+
+/**
+ * Dark app chrome — one neutral palette; blue only on logo + Practice CTA.
+ */
+.app-header {
+  background-color: #0a1224;
+  color: #ffffff;
+  box-shadow: 0 4px 20px -6px rgba(3, 55, 225, 0.28);
+}
+
+.app-header .nav-underline::after {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+.app-header .nav-underline[data-active='false']:hover::after {
+  background: rgba(255, 255, 255, 0.45) !important;
+}
+
+.chrome-ghost-btn {
+  @apply type-nav-cta rounded-sm border border-white/15 px-2.5 py-2;
+  @apply text-white/60 transition-colors;
+  @apply hover:border-white/30 hover:bg-white/10 hover:text-white;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
+}
+
+.chrome-title-badge {
+  @apply inline-block rounded-sm bg-white/10 px-1.5 py-px text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50;
+  vertical-align: baseline;
+}
+
+/**
+ * Brand chrome — sharp blue ‘LL’ tile and Practice nav button.
+ * IDs + !important resist forced-colors and aggressive extension overrides.
+ */
+#sat-brand-mark {
+  forced-color-adjust: none !important;
+  isolation: isolate;
+  background-color: #0337e1 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.nav-practice-tab,
+#sat-nav-practice,
+#sat-nav-practice-mobile {
+  forced-color-adjust: none !important;
+  isolation: isolate;
+  background-color: #0337e1 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.nav-practice-tab:hover,
+#sat-nav-practice:hover,
+#sat-nav-practice-mobile:hover {
+  background-color: #2557fc !important;
+}
+
+/** Slim animated underline for editorial nav links. */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: #0337e1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+.nav-underline:hover::after,
+.nav-underline[data-active='true']::after {
+  transform: scaleX(1);
+}
+
+/** Content band sits on a light wash below dark chrome. */
+.app-main {
+  min-height: calc(100dvh - 3.5rem);
+}
+
+@media (max-width: 1023px) {
+  .app-main--with-mobile-nav {
+    padding-bottom: calc(3.25rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/** Break out of centered main — full viewport-width section backgrounds. */
+.band-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}

@@ -1,0 +1,25 @@
+ARCHIVED: practice tokens — hints, skips, second chances
+=========================================================
+
+Removed from the live app (UI + session logic + consumeToken). Streak shield UI is archived separately under src/archived/streak-shield/ (server caps + applyStreakShield still exist).
+
+To restore:
+1) src/lib/userProfile.js
+   - In dailyTokenCaps(), set hints/skips/secondChances back to level-gated caps (see git history or duplicate from functions/index.js before change).
+   - Re-add export async function consumeToken(uid, tokenKey) { ... } (hints | skips | secondChances | streakShields branches).
+
+2) functions/index.js
+   - Restore dailyTokenCaps() hints/skips/secondChances lines to match client.
+
+3) src/pages/PracticePage.js
+   - Import consumeToken, dailyTokenCaps from userProfile; useUserProfile: privateProfile again.
+   - Session state: hintsShown, skippedQuestions, secondChanceSpent objects on startFromQuestionList.
+   - answer(): guard if (session.skippedQuestions?.[q.id]) return;
+   - Re-add spendHintToken, spendSecondChanceToken, skipWithToken.
+   - Results: subtract skipped keys from total.
+   - Session UI: token bar (Hint / Skip / Second chance) + optional explanation block when hintsShown[q.id].
+
+4) src/pages/ProfilePage.js
+   - Section 02: restore three TokenConsumableRow entries for Hints, Skips, Second chances + original subtitle.
+
+Search the repo at the commit before removal for exact diffs.
